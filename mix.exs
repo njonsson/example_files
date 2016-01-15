@@ -32,7 +32,7 @@ defmodule ExampleFiles.Mixfile do
     [files:       ~w(History.md License.md README.md lib mix.exs),
      maintainers: ["Nils Jonsson <example_files@nilsjonsson.com>"],
      licenses:    ["MIT"],
-     links:       %{"Home"   => "https://njonsson.github.com/example_files",
+     links:       %{"Home"   => "https://njonsson.github.io/example_files",
                     "Source" => "https://github.com/njonsson/example_files",
                     "Issues" => "https://github.com/njonsson/example_files/issues"}]
   end
