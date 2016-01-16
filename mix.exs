@@ -7,10 +7,14 @@ defmodule ExampleFiles.Mixfile do
 
   def project do
     [app:         :example_files,
-     version:     "0.1.1",
+     version:     version,
      description: description,
      package:     package,
      deps:        deps]
+  end
+
+  def version do
+    "0.1.1"
   end
 
   defp deps do
