@@ -6,11 +6,12 @@ defmodule ExampleFiles.Mixfile do
   end
 
   def project do
-    [app:         :example_files,
-     version:     version,
-     description: description,
-     package:     package,
-     deps:        deps]
+    [app:               :example_files,
+     version:           version,
+     description:       description,
+     package:           package,
+     deps:              deps,
+     preferred_cli_env: [espec: :test]]
   end
 
   def version do
@@ -18,7 +19,7 @@ defmodule ExampleFiles.Mixfile do
   end
 
   defp deps do
-    []
+    [{:espec, "~> 0.8", only: [:dev, :test]}]
   end
 
   defp description do
