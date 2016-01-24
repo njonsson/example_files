@@ -26,8 +26,8 @@ defmodule ExampleFiles.Mixfile do
     """
     Mix tasks for managing example files in your project.
 
-    Your project may contain files that serve as examples to the developer, or
-    templates. Such files are intended to be copied by the developer for use as
+    Your project may contain files that are intended to serve as explanatory
+    samples of files provided by a project contributor or user, such as
     configuration and the like. The Mix tasks provided here enable you to easily
     find, copy, and check the freshness of example files and your copies of them.
     """
