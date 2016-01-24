@@ -15,7 +15,7 @@ defmodule ExampleFiles.Mixfile do
   end
 
   def version do
-    "0.1.1"
+    "0.2.0"
   end
 
   defp deps do
