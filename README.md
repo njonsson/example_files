@@ -3,6 +3,8 @@
 [![Travis CI build status]][Travis-CI-build-status]
 [![Hex release]           ][Hex-release]
 
+> See what’s changed lately by reading the [project history][project-history].
+
 Your project may contain files that are intended to serve as explanatory samples
 of files provided by a project contributor or user, such as configuration and the
 like. The Mix tasks provided here enable you to easily find, copy, and check the
@@ -75,8 +77,9 @@ Released under the [MIT License][MIT-License].
 [Travis CI build status]: https://secure.travis-ci.org/njonsson/example_files.svg?branch=master
 [Hex release]:            https://img.shields.io/hexpm/v/example_files.svg
 
-[Travis-CI-build-status]:         http://travis-ci.org/njonsson/example_files                     "Travis CI build status for example_files"
-[Hex-release]:                    https://hex.pm/packages/example_files                           "Hex release of example_files"
-[fork-example_files]:             https://github.com/njonsson/example_files/fork                  "Fork the official repository of example_files"
-[compare-example_files-branches]: https://github.com/njonsson/example_files/compare               "Compare branches of example_files repositories"
-[MIT-License]:                    http://github.com/njonsson/example_files/blob/master/License.md "MIT License claim for example_files"
+[Travis-CI-build-status]:         http://travis-ci.org/njonsson/example_files                      "Travis CI build status for example_files"
+[Hex-release]:                    https://hex.pm/packages/example_files                            "Hex release of example_files"
+[project-history]:                https://github.com/njonsson/example_files/blob/master/History.md "example_files project history"
+[fork-example_files]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of example_files"
+[compare-example_files-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of example_files repositories"
+[MIT-License]:                    http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for example_files"
