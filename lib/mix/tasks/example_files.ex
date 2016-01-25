@@ -21,20 +21,39 @@ defmodule Mix.Tasks.ExampleFiles do
   * Out-of-date —— applied, but currently different in content from the example
   * Up-to-date —— applied and identical in content to the example
 
+  ```
+  $ mix example_files
+  [...]
+
+  Missing:    spec/fixtures/no_collisions/file
+  1 example file found
+  ```
+
   ## Collisions
 
   Your project may contain two or more example files that, when applied, use the
   same resulting file name. This constitutes a “collision.” Colliding example
   files are noted on *stderr*.
 
+  ```
+  $ mix example_files
+  [...]
+
+  Collision detected! spec/fixtures/collisions/file1, corresponding to:
+  • spec/fixtures/collisions/file1.example
+  • spec/fixtures/collisions/EXAMPLE-file1
+  ```
+
   ## Command-line options
 
   Any arguments you provide to the task are treated as file glob expressions.
 
-      $ mix example_files foo bar
-      Using glob pattern {foo,bar}/*{example,Example,EXAMPLE}*
+  ```
+  $ mix example_files foo bar
+  Using glob pattern {foo,bar}/*{example,Example,EXAMPLE}*
 
-      [...]
+  [...]
+  ```
   """
 
   import ExampleFiles.UI,
