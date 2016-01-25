@@ -1,4 +1,4 @@
-# example_files
+# _example_files_
 
 [![Travis CI build status]][Travis-CI-build-status]
 [![Hex release]           ][Hex-release]
@@ -77,9 +77,9 @@ Released under the [MIT License][MIT-License].
 [Travis CI build status]: https://secure.travis-ci.org/njonsson/example_files.svg?branch=master
 [Hex release]:            https://img.shields.io/hexpm/v/example_files.svg
 
-[Travis-CI-build-status]:         http://travis-ci.org/njonsson/example_files                      "Travis CI build status for example_files"
-[Hex-release]:                    https://hex.pm/packages/example_files                            "Hex release of example_files"
-[project-history]:                https://github.com/njonsson/example_files/blob/master/History.md "example_files project history"
-[fork-example_files]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of example_files"
-[compare-example_files-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of example_files repositories"
-[MIT-License]:                    http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for example_files"
+[Travis-CI-build-status]:         http://travis-ci.org/njonsson/example_files                      "Travis CI build status for ‘example_files’"
+[Hex-release]:                    https://hex.pm/packages/example_files                            "Hex release of ‘example_files’"
+[project-history]:                https://github.com/njonsson/example_files/blob/master/History.md "‘example_files’ project history"
+[fork-example_files]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of ‘example_files’"
+[compare-example_files-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of ‘example_files’ repositories"
+[MIT-License]:                    http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for ‘example_files’"
