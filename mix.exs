@@ -19,7 +19,10 @@ defmodule ExampleFiles.Mixfile do
   end
 
   defp deps do
-    [{:espec, "~> 0.8", only: [:dev, :test]}]
+    [{:dialyze,   "~> 0.2",  only: :dev},
+     {:ex_doc,    "~> 0.11", only: :dev},
+       {:earmark, "~> 0.2",  only: :dev},
+     {:espec,     "~> 0.8",  only: [:dev, :test]}]
   end
 
   defp description do
