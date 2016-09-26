@@ -117,12 +117,20 @@ defmodule ExampleFilesSpec do
             end
 
             describe "collisions" do
-              subject do: result_collisions
+              subject do: result_collisions |> Map.keys
 
               it do
-                File.cd! fixtures_path, fn ->
-                  is_expected.to eq(%{"file1" => [{false, "file1.example", "file1"},
-                                                  {false, "EXAMPLE-file1", "file1"}]})
+                File.cd! fixtures_path, fn -> is_expected.to eq(["file1"]) end
+              end
+
+              describe "on file1" do
+                subject do: result_collisions["file1"]
+
+                it do
+                  File.cd! fixtures_path, fn ->
+                    is_expected.to have({false, "file1.example", "file1"})
+                    is_expected.to have({false, "EXAMPLE-file1", "file1"})
+                  end
                 end
               end
             end
