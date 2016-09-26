@@ -1,5 +1,5 @@
-%{"dialyze": {:hex, :dialyze, "0.2.1"},
-  "earmark": {:hex, :earmark, "0.2.1"},
-  "espec": {:hex, :espec, "0.8.18"},
-  "ex_doc": {:hex, :ex_doc, "0.11.4"},
-  "meck": {:hex, :meck, "0.8.4"}}
+%{"dialyze": {:hex, :dialyze, "0.2.1", "9fb71767f96649020d769db7cbd7290059daff23707d6e851e206b1fdfa92f9d", [:mix], []},
+  "earmark": {:hex, :earmark, "0.2.1", "ba6d26ceb16106d069b289df66751734802777a3cbb6787026dd800ffeb850f3", [:mix], []},
+  "espec": {:hex, :espec, "0.8.18", "63362f6f51531bd8c03b23cb9724ce4550617307c0561930dfa07cb4f40d922e", [:mix], [{:meck, "~> 0.8.4", [hex: :meck, optional: false]}]},
+  "ex_doc": {:hex, :ex_doc, "0.11.4", "a064bdb720594c3745b94709b17ffb834fd858b4e0c1f48f37c0d92700759e02", [:mix], [{:earmark, "~> 0.1.17 or ~> 0.2", [hex: :earmark, optional: true]}]},
+  "meck": {:hex, :meck, "0.8.4", "59ca1cd971372aa223138efcf9b29475bde299e1953046a0c727184790ab1520", [:rebar, :make], []}}
