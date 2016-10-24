@@ -12,7 +12,7 @@ defmodule ExampleFiles.Mixfile do
     [app:               :example_files,
      version:           version,
      description:       description,
-     elixir:            "~> 1.3",
+     elixir:            "~> 1.0",
      build_embedded:    Mix.env == :prod,
      start_permanent:   Mix.env == :prod,
      package:           package,
