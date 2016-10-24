@@ -1,4 +1,4 @@
-# _example_files_
+# example_files
 
 [![Travis CI build status]][Travis-CI-build-status]
 [![Hex release]           ][Hex-release]
@@ -11,7 +11,7 @@ the freshness of example files and your copies of them.
 
 ## Installation
 
-Use _example_files_ by adding it to a Mix `deps` declaration.
+Use *example_files* by adding it to a Mix `deps` declaration.
 
 ```elixir
 # mix.exs
@@ -29,10 +29,10 @@ end
 
 ## Usage
 
-The _example_files_ commands are exposed as Mix tasks. Get help on them through
+The *example_files* commands are exposed as Mix tasks. Get help on them through
 Mix itself, with `mix help | grep example_files` and `mix help example_files`.
 
-### _example_files_ task
+### *example_files* task
 
 To list all example files in your project, `mix example_files`.
 
