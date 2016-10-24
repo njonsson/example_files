@@ -16,10 +16,6 @@ Use *example_files* by adding it to a Mix `deps` declaration.
 ```elixir
 # mix.exs
 
-def application do
-  [applications: [:example_files]]
-end
-
 # ...
 defp deps do
   [{:example_files, "~> 0.2", only: [:dev, :test]}]
