@@ -5,10 +5,9 @@
 
 > See what’s changed lately by reading the [project history][project-history].
 
-Your project may contain files that are intended to serve as explanatory samples
-of files provided by a project contributor or user, such as configuration and the
-like. The Mix tasks provided here enable you to easily find, copy, and check the
-freshness of example files and your copies of them.
+Some files in a project may be templates for unversioned files, such as
+user-specific configuration. The Mix tasks provided here find, copy, and check
+the freshness of example files and your copies of them.
 
 ## Installation
 
@@ -16,6 +15,10 @@ Use _example_files_ by adding it to a Mix `deps` declaration.
 
 ```elixir
 # mix.exs
+
+def application do
+  [applications: [:example_files]]
+end
 
 # ...
 defp deps do
