@@ -28,7 +28,7 @@ Use *example_files* by adding it to a Mix `deps` declaration.
 
 # ...
 defp deps do
-  [{:example_files, "~> 0.2", only: [:dev, :test]}]
+  [{:example_files, "~> 1.0", only: [:dev, :test]}]
 end
 # ...
 ```

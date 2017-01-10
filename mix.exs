@@ -30,9 +30,7 @@ defmodule ExampleFiles.Mixfile do
                          main: "about"]]
   end
 
-  def version do
-    "0.2.0"
-  end
+  def version, do: "1.0.0"
 
   # Dependencies can be Hex packages:
   #
