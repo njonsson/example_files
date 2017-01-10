@@ -1,129 +1,131 @@
 defmodule ExampleFiles.FileSpec do
   use ESpec, async: true
 
-  # TODO: Figure out why `warn: false` is necessary despite references below that fail to compile without this alias
-  alias ExampleFiles.File, warn: false
+  use Doctest
 
-  describe ".name_match?" do
-    describe "returning false" do
-      let :expected, do: false
+  let :file do
+    {:ok, pid} = described_module.start_link([path])
+    pid
+  end
 
-      describe ~s(for "foo") do
-        subject do: File.name_match? "foo"
+  let :path, do: "#{path_when_pulled}.example"
 
-        it do: is_expected.to eq(expected)
+  let :path_when_pulled, do: Path.join System.tmp_dir!, random_numerals
+
+  let :random_numerals, do: String.slice(to_string(:rand.uniform), 2..-1)
+
+  describe "where the example file does not exist" do
+    describe ".status" do
+      subject do: file |> described_module.status
+
+      it do: is_expected.to eq(:missing)
+    end
+
+    describe ".pull" do
+      subject! do: file |> described_module.pull
+
+      finally do: path_when_pulled |> File.rm
+
+      specify do: expect(File.exists?(path_when_pulled)).to eq(false)
+
+      it do: is_expected.to eq({:error, :enoent})
+    end
+
+    describe ".clean" do
+      subject! do: file |> described_module.clean
+
+      specify do: expect(File.exists?(path_when_pulled)).to eq(false)
+
+      it do: is_expected.to eq({:ok, :enoent})
+    end
+  end
+
+  describe "where the example file exists, and the copy" do
+    before do: path |> File.touch!
+
+    finally do: path |> File.rm
+
+    describe "does not exist" do
+      describe ".status" do
+        subject do: file |> described_module.status
+
+        it do: is_expected.to eq(:missing)
       end
 
-      describe ~s(for "example") do
-        subject do: File.name_match? "example"
+      describe ".pull" do
+        subject! do: file |> described_module.pull
 
-        it do: is_expected.to eq(expected)
+        finally do: path_when_pulled |> File.rm
+
+        it do: expect(File.exists?(path_when_pulled)).to eq(true)
+
+        it do: is_expected.to eq({:ok, :copied})
       end
 
-      describe ~s(for "fooexample") do
-        subject do: File.name_match? "fooexample"
+      describe ".clean" do
+        subject! do: file |> described_module.clean
 
-        it do: is_expected.to eq(expected)
-      end
+        finally do: path_when_pulled |> File.rm
 
-      describe ~s(for "examplefoo") do
-        subject do: File.name_match? "examplefoo"
+        it do: expect(File.exists?(path_when_pulled)).to eq(false)
 
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "foo.example/bar") do
-        subject do: File.name_match? "foo.example/foo"
-
-        it do: is_expected.to eq(expected)
+        it do: is_expected.to eq({:ok, :enoent})
       end
     end
 
-    describe "returning true" do
-      let :expected, do: true
+    describe "is identical" do
+      before do: path_when_pulled |> File.touch!
 
-      describe ~s(for "foo.example") do
-        subject do: File.name_match? "foo.example"
+      finally do: path_when_pulled |> File.rm
 
-        it do: is_expected.to eq(expected)
+      describe ".status" do
+        subject do: file |> described_module.status
+
+        it do: is_expected.to eq(:identical)
       end
 
-      describe ~s(for "fooExample") do
-        subject do: File.name_match? "fooExample"
+      describe ".pull" do
+        subject! do: file |> described_module.pull
 
-        it do: is_expected.to eq(expected)
+        specify do: expect(File.exists?(path_when_pulled)).to eq(true)
+
+        it do: is_expected.to eq({:ok, :identical})
       end
 
-      describe ~s(for "example.foo") do
-        subject do: File.name_match? "example.foo"
+      describe ".clean" do
+        subject! do: file |> described_module.clean
 
-        it do: is_expected.to eq(expected)
+        specify do: expect(File.exists?(path_when_pulled)).to eq(false)
+
+        it do: is_expected.to eq({:ok, :deleted})
+      end
+    end
+
+    describe "is different" do
+      before do: path_when_pulled |> File.write!("foo")
+
+      finally do: path_when_pulled |> File.rm
+
+      describe ".status" do
+        subject do: file |> described_module.status
+
+        it do: is_expected.to eq(:out_of_date)
       end
 
-      describe ~s(for "exampleFoo") do
-        subject do: File.name_match? "exampleFoo"
+      describe ".pull" do
+        subject! do: file |> described_module.pull
 
-        it do: is_expected.to eq(expected)
+        specify do: expect(File.exists?(path_when_pulled)).to eq(true)
+
+        it do: is_expected.to eq({:ok, :copied})
       end
 
-      describe ~s(for "example123") do
-        subject do: File.name_match? "example123"
+      describe ".clean" do
+        subject! do: file |> described_module.clean
 
-        it do: is_expected.to eq(expected)
-      end
+        specify do: expect(File.exists?(path_when_pulled)).to eq(false)
 
-      describe ~s(for "foo.Example") do
-        subject do: File.name_match? "foo.Example"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "Example.foo") do
-        subject do: File.name_match? "Example.foo"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "ExampleFoo") do
-        subject do: File.name_match? "ExampleFoo"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "Example123") do
-        subject do: File.name_match? "Example123"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "foo.EXAMPLE") do
-        subject do: File.name_match? "foo.EXAMPLE"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "EXAMPLE.foo") do
-        subject do: File.name_match? "EXAMPLE.foo"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "foo.example.bar") do
-        subject do: File.name_match? "foo.example.bar"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "fooExampleBar") do
-        subject do: File.name_match? "fooExampleBar"
-
-        it do: is_expected.to eq(expected)
-      end
-
-      describe ~s(for "123Example456") do
-        subject do: File.name_match? "123Example456"
-
-        it do: is_expected.to eq(expected)
+        it do: is_expected.to eq({:ok, :deleted})
       end
     end
   end

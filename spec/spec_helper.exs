@@ -8,3 +8,14 @@ ESpec.start
 #   config.finally fn(_shared) ->
 #   end
 # end
+
+defmodule Doctest do
+  defmacro __using__(_opts) do
+    quote do
+      __MODULE__ |> to_string
+                 |> String.replace(~r/Spec$/, "")
+                 |> String.to_atom
+                 |> ESpec.DocTest.doctest
+    end
+  end
+end

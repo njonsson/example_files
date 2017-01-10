@@ -5,7 +5,9 @@ defmodule ExampleFiles.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger],
+     mod:          {ExampleFiles.Application, []},
+     registered:   [ExampleFiles.UI]]
   end
 
   def project do
@@ -17,7 +19,15 @@ defmodule ExampleFiles.Mixfile do
      start_permanent:   Mix.env == :prod,
      package:           package,
      deps:              deps,
-     preferred_cli_env: [espec: :test]]
+     preferred_cli_env: [espec: :test],
+     docs:              [extras: ["README.md":  [filename: "about",
+                                                 title: "About example_files"],
+                                  "License.md": [filename: "license",
+                                                 title: "Project license"]],
+                                  # TODO: Figure out why ExDoc chokes on this
+                                  # "History.md": [filename: "history",
+                                  #                title: "Project history"]],
+                         main: "about"]]
   end
 
   def version do
@@ -37,18 +47,10 @@ defmodule ExampleFiles.Mixfile do
     [{:dialyze,   "~> 0.2",  only: :dev},
      {:ex_doc,    "~> 0.14", only: :dev},
        {:earmark, "~> 1.0",  only: :dev},
-     {:espec,     "~> 1.1",  only: [:dev, :test]}]
+     {:espec,     "~> 1.2",  only: [:dev, :test]}]
   end
 
-  defp description do
-    """
-    Mix tasks for managing example files in your project.
-
-    Some files in a project may be templates for unversioned files, such as
-    user-specific configuration. The Mix tasks provided here find, copy, and
-    check the freshness of example files and your copies of them.
-    """
-  end
+  defp description, do: "Mix tasks for managing example files in your project."
 
   defp package do
     [files:       ~w(History.md License.md README.md lib mix.exs),

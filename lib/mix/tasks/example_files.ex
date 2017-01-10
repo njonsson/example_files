@@ -1,100 +1,157 @@
 defmodule Mix.Tasks.ExampleFiles do
+  @dialyzer :no_undefined_callbacks
   use Mix.Task
 
   @moduledoc """
-  Lists all example files in your project.
+  Lists example files in your project and shows the status of each.
 
   This task traverses the current working directory, looking for files that are
-  intended to serve as explanatory samples of files provided by a project
-  contributor or user. By default it uses `**/*{example,Example,EXAMPLE}*` as the
-  file glob pattern.
+  intended to serve as illustrative samples of files provided by a project
+  contributor or user.
 
-  An example file may be “applied,” which means that it is copied into the same
-  directory, using a file name that lacks the “example” nomenclature.
+  ```console
+  $ mix example_files
+  Using glob pattern **/*{example,Example,EXAMPLE}*
+
+  Missing:     spec/fixtures/collisions/file2
+  Missing:     spec/fixtures/no_collisions/file
+
+  Collision detected! spec/fixtures/collisions/file1
+  • spec/fixtures/collisions/EXAMPLE-file1
+  • spec/fixtures/collisions/file1.example
+  ```
 
   ## Individual file status
 
   This task displays the current status of each of the example files it finds.
-  Status is one of three values:
+  The status of a copy is one of three values:
 
-  * Missing —— never applied
-  * Out-of-date —— applied, but currently different in content from the example
-  * Up-to-date —— applied and identical in content to the example
+  * Missing — not present
+  * Identical — present and identical in content to the example
+  * Out-of-date — present, but currently different in content from the example
 
+  ## Fileglobs
+
+  The pattern `**/*{example,Example,EXAMPLE}*` is used by default to search for
+  example files. You can further restrict the search in `mix example_files` and
+  its subtasks by specifying one or paths or patterns that will be combined with
+  the example-files pattern:
+
+  ```console
+  $ mix example_files doc log
+  Using glob pattern {doc,log}/**/*{example,Example,EXAMPLE}*
   ```
-  $ mix example_files
-  [...]
 
-  Missing:    spec/fixtures/no_collisions/file
-  1 example file found
+  ## Ignored paths
+
+  The following paths are ignored by default in searching for example files:
+
+  * _.git/_
+  * _\_build/_
+  * _deps/_
+  * _node_modules/_
+  * _tmp/_
+
+  You can override this default in `mix example_files` and its subtasks by
+  specifying one or more `--ignore` or `-i` options:
+
+  ```console
+  $ mix example_files --ignore spec --ignore log
+  Using glob pattern **/*{example,Example,EXAMPLE}*
   ```
 
   ## Collisions
 
-  Your project may contain two or more example files that, when applied, use the
-  same resulting file name. This constitutes a “collision.” Colliding example
-  files are noted on *stderr*.
+  An example file may be “pulled,” which means that it is copied into the same
+  directory, using a file name that lacks the “example” nomenclature. A project
+  may contain two or more example files that, if they were both pulled, would use
+  the same resulting file name. This constitutes a “collision,” which is always
+  prevented; colliding example files are never operated on, but are displayed on
+  _stderr_.
 
-  ```
-  $ mix example_files
-  [...]
+  ## Verbose output
 
-  Collision detected! spec/fixtures/collisions/file1, corresponding to:
-  • spec/fixtures/collisions/file1.example
-  • spec/fixtures/collisions/EXAMPLE-file1
-  ```
+  You can get more information about what `mix example_files` and its subtasks
+  are doing by specifying the `--verbose` or `-v` option.
+  """ |> String.replace(~r/\s+$/, "")
+  # TODO: Use String.trim_trailing/1 when targeting Elixir >= v1.3
 
-  ## Command-line options
+  @shortdoc "Lists example files in your project"
 
-  Any arguments you provide to the task are treated as file glob expressions.
+  alias ExampleFiles.{English,Options,UI}
+  alias IO.ANSI
 
-  ```
-  $ mix example_files foo bar
-  Using glob pattern {foo,bar}/*{example,Example,EXAMPLE}*
+  @spec run([binary]) :: [pid]
+  @doc false
+  def run(arguments) do
+    :example_files |> Application.ensure_all_started
 
-  [...]
-  ```
-  """
+    {:ok, options_pid} = Options.start_link(arguments)
+    (options_pid |> Options.options).fileglobs |> display_fileglobs
 
-  import ExampleFiles.UI,
-         only: [display_collisions:   1,
-                display_glob_pattern: 1,
-                info:                 0,
-                info:                 1,
-                error:                1,
-                blue:                 1,
-                red:                  1,
-                yellow:               1,
-                underline:            1]
+    {:ok, example_files_pid} = ExampleFiles.start_link(options: options_pid)
+    noncollisions = example_files_pid |> display_noncollisions
+    example_files_pid |> display_collisions
 
-  @shortdoc "List all example files in your project"
-
-  def run(filespecs) do
-    {glob, noncollisions, collisions} = filespecs |> ExampleFiles.find
-
-    glob |> display_glob_pattern
-
-    noncollisions |> display_noncollisions
-    collisions    |> display_collisions
-
-    {glob, noncollisions, collisions}
+    noncollisions
   end
 
-  defp display_noncollisions(noncollisions) when is_list(noncollisions) do
-    info
-
-    for {status, _, copy} <- noncollisions do
-      message = case status do
-        :up_to_date  ->   blue("Up to date: ")
-        :out_of_date -> yellow("Out of date:")
-        false        ->    red("Missing:    ")
+  @spec display_collisions(pid) :: [pid]
+  @doc false
+  def display_collisions(example_files_pid) do
+    for example_files <- example_files_pid |> ExampleFiles.collisions do
+      UI |> UI.error
+      path_when_pulled = example_files |> List.first
+                                       |> ExampleFiles.File.path_when_pulled
+                                       |> UI.underline
+      UI |> UI.error([UI.red("Collision detected!"), " ", path_when_pulled])
+      for example_file <- example_files do
+        path = example_file |> ExampleFiles.File.path
+        UI |> UI.error(["• ", UI.underline(path)])
       end
-      info(message ++ underline(copy))
+
+      example_files
+    end
+  end
+
+  @spec display_fileglobs([binary]) :: ANSI.ansidata
+
+  @doc false
+  def display_fileglobs([fileglob]) do
+    UI |> UI.info(["Using fileglob ", UI.underline(fileglob)])
+  end
+
+  @doc false
+  def display_fileglobs(fileglobs) do
+    list = fileglobs |> Enum.map(&(&1 |> UI.underline
+                                      |> ANSI.format_fragment
+                                      |> IO.chardata_to_string))
+                     |> English.list
+    UI |> UI.info(["Using fileglobs ", list])
+  end
+
+  @spec display_noncollisions(pid) :: [pid]
+  defp display_noncollisions(example_files_pid) do
+    noncollisions = example_files_pid |> ExampleFiles.noncollisions
+    if 0 < length(noncollisions), do: UI |> UI.info
+
+    for file <- noncollisions do
+      message = case file |> ExampleFiles.File.status do
+        :identical   -> "Identical:  " |> UI.green
+        :out_of_date -> "Out of date:" |> UI.yellow
+        :missing     -> "Missing:    " |> UI.yellow
+      end
+      UI |> UI.info([message,
+                     " ",
+                     UI.underline(ExampleFiles.File.path_when_pulled(file))])
     end
 
+    UI |> UI.info
     example_file_or_files = noncollisions |> length
-                                          |> ExampleFiles.Util.pluralize("example file")
+                                          |> English.pluralize("example file")
                                           |> String.capitalize
-    info "#{example_file_or_files} found"
+    UI |> UI.info("#{example_file_or_files} found")
+
+    noncollisions
   end
 end

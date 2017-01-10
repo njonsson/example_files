@@ -3,11 +3,21 @@
 [![Travis CI build status]][Travis-CI-build-status]
 [![Hex release]           ][Hex-release]
 
-> See what’s changed lately by reading the [project history][project-history].
+**See what’s changed lately by reading the [project history][project-history].**
 
-Some files in a project may be templates for unversioned files, such as
-user-specific configuration. The Mix tasks provided here find, copy, and check
-the freshness of example files and your copies of them.
+## What is an example file?
+
+Many projects contain files which serve as templates or examples for other files.
+The examples are not themselves operative, but serve to demonstrate the content
+of an operative file, such as developer-specific configuration.
+
+To illustrate: your project may contain a version-controlled file named
+_config/config.exs.example_. You apply the example configuration by copying
+_config/config.exs.example_ to _config/config.exs_, and in the process you may
+decide to alter the content, such as tweaking defaults.
+
+The Mix tasks provided here find, copy, and check the freshness of example files
+and your copies of them.
 
 ## Installation
 
@@ -28,53 +38,22 @@ end
 The *example_files* commands are exposed as Mix tasks. Get help on them through
 Mix itself, with `mix help | grep example_files` and `mix help example_files`.
 
-### *example_files* task
-
-To list all example files in your project, `mix example_files`.
-
-This task traverses the current working directory, looking for files that are
-intended to serve as explanatory samples of files provided by a project
-contributor or user. By default it uses `**/*{example,Example,EXAMPLE}*` as the
-file glob pattern.
-
-An example file may be “applied,” which means that it is copied into the same
-directory, using a file name that lacks the “example” nomenclature.
-
-```
-$ mix example_files
-Using glob pattern **/*{example,Example,EXAMPLE}*
-
-Missing:    spec/fixtures/no_collisions/file
-1 example file found
-
-Collision detected! spec/fixtures/collisions/file1, corresponding to:
-· spec/fixtures/collisions/file1.example
-· spec/fixtures/collisions/EXAMPLE-file1
-```
-
-### Individual file status
-
-Status is one of three values:
-
-  * Missing — never applied
-  * Out-of-date — applied, but currently different in content from the example
-  * Up-to-date — applied and identical in content to the example
-
-### Collisions
-
-Your project may contain two or more example files that, when applied, use the
-same resulting file name. This constitutes a “collision.” Colliding example files
-are noted on _stderr_.
+* `mix example_files` – lists example files in your project and shows the status
+of each
+* `mix example_files.pull` — pulls into effect example files in your project by
+  making copies of them using a file name that lacks the “example” nomenclature
+* `mix example_files.clean` — cleans example files in your project by deleting
+  your copies of them
 
 ## Contributing
 
 To submit a patch to the project:
 
-1. [Fork][fork-example_files] the official repository.
+1. [Fork][fork-project] the official repository.
 2. Create your feature branch: `git checkout -b my-new-feature`.
 3. Commit your changes: `git commit -am 'Add some feature'`.
 4. Push to the branch: `git push origin my-new-feature`.
-5. [Create][compare-example_files-branches] a new pull request.
+5. [Create][compare-project-branches] a new pull request.
 
 After cloning the repository, `mix deps.get` to install dependencies. Then
 `mix espec` to run the tests. You can also `iex` to get an interactive prompt
@@ -96,9 +75,9 @@ Released under the [MIT License][MIT-License].
 [Travis CI build status]: https://secure.travis-ci.org/njonsson/example_files.svg?branch=master
 [Hex release]:            https://img.shields.io/hexpm/v/example_files.svg
 
-[Travis-CI-build-status]:         http://travis-ci.org/njonsson/example_files                      "Travis CI build status for ‘example_files’"
-[Hex-release]:                    https://hex.pm/packages/example_files                            "Hex release of ‘example_files’"
-[project-history]:                https://github.com/njonsson/example_files/blob/master/History.md "‘example_files’ project history"
-[fork-example_files]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of ‘example_files’"
-[compare-example_files-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of ‘example_files’ repositories"
-[MIT-License]:                    http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for ‘example_files’"
+[Travis-CI-build-status]:   http://travis-ci.org/njonsson/example_files                      "Travis CI build status for ‘example_files’"
+[Hex-release]:              https://hex.pm/packages/example_files                            "Hex release of ‘example_files’"
+[project-history]:          https://github.com/njonsson/example_files/blob/master/History.md "‘example_files’ project history"
+[fork-project]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of ‘example_files’"
+[compare-project-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of ‘example_files’ repositories"
+[MIT-License]:              http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for ‘example_files’"
