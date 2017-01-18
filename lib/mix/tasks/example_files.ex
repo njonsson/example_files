@@ -11,7 +11,7 @@ defmodule Mix.Tasks.ExampleFiles do
 
   ```console
   $ mix example_files
-  Using glob pattern **/*{example,Example,EXAMPLE}*
+  Using fileglob **/*{example,Example,EXAMPLE}*
 
   Missing:     spec/fixtures/collisions/file2
   Missing:     spec/fixtures/no_collisions/file
@@ -39,7 +39,7 @@ defmodule Mix.Tasks.ExampleFiles do
 
   ```console
   $ mix example_files doc log
-  Using glob pattern {doc,log}/**/*{example,Example,EXAMPLE}*
+  Using fileglob {doc,log}/**/*{example,Example,EXAMPLE}*
   ```
 
   ## Ignored paths
@@ -57,7 +57,7 @@ defmodule Mix.Tasks.ExampleFiles do
 
   ```console
   $ mix example_files --ignore spec --ignore log
-  Using glob pattern **/*{example,Example,EXAMPLE}*
+  Using fileglob **/*{example,Example,EXAMPLE}*
   ```
 
   ## Collisions
