@@ -38,12 +38,13 @@ end
 The *example_files* commands are exposed as Mix tasks. Get help on them through
 Mix itself, with `mix help | grep example_files` and `mix help example_files`.
 
-* `mix example_files` – lists example files in your project and shows the status
-of each
-* `mix example_files.pull` — pulls into effect example files in your project by
-  making copies of them using a file name that lacks the “example” nomenclature
-* `mix example_files.clean` — cleans example files in your project by deleting
-  your copies of them
+* [`mix example_files`][doc-mix-example-files] – lists example files in your
+  project and shows the status of each
+* [`mix example_files.pull`][doc-mix-example-files-pull] — pulls into effect
+  example files in your project by making copies of them using a file name that
+  lacks the “example” nomenclature
+* [`mix example_files.clean`][doc-mix-example-files-clean] — cleans example files
+  in your project by deleting your copies of them
 
 ## Contributing
 
@@ -75,9 +76,12 @@ Released under the [MIT License][MIT-License].
 [Travis CI build status]: https://secure.travis-ci.org/njonsson/example_files.svg?branch=master
 [Hex release]:            https://img.shields.io/hexpm/v/example_files.svg
 
-[Travis-CI-build-status]:   http://travis-ci.org/njonsson/example_files                      "Travis CI build status for ‘example_files’"
-[Hex-release]:              https://hex.pm/packages/example_files                            "Hex release of ‘example_files’"
-[project-history]:          https://github.com/njonsson/example_files/blob/master/History.md "‘example_files’ project history"
-[fork-project]:             https://github.com/njonsson/example_files/fork                   "Fork the official repository of ‘example_files’"
-[compare-project-branches]: https://github.com/njonsson/example_files/compare                "Compare branches of ‘example_files’ repositories"
-[MIT-License]:              http://github.com/njonsson/example_files/blob/master/License.md  "MIT License claim for ‘example_files’"
+[Travis-CI-build-status]:      http://travis-ci.org/njonsson/example_files                        "Travis CI build status for ‘example_files’"
+[Hex-release]:                 https://hex.pm/packages/example_files                              "Hex release of ‘example_files’"
+[project-history]:             https://github.com/njonsson/example_files/blob/master/History.md   "‘example_files’ project history"
+[doc-mix-example-files]:       https://hexdocs.pm/example_files/Mix.Tasks.ExampleFiles.html       "Documentation on the ‘mix example_files’ task"
+[doc-mix-example-files-pull]:  https://hexdocs.pm/example_files/Mix.Tasks.ExampleFiles.Pull.html  "Documentation on the ‘mix example_files.pull’ task"
+[doc-mix-example-files-clean]: https://hexdocs.pm/example_files/Mix.Tasks.ExampleFiles.Clean.html "Documentation on the ‘mix example_files.clean’ task"
+[fork-project]:                https://github.com/njonsson/example_files/fork                     "Fork the official repository of ‘example_files’"
+[compare-project-branches]:    https://github.com/njonsson/example_files/compare                  "Compare branches of ‘example_files’ repositories"
+[MIT-License]:                 http://github.com/njonsson/example_files/blob/master/License.md    "MIT License claim for ‘example_files’"
