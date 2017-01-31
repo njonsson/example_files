@@ -16,6 +16,8 @@ defmodule Mix.Tasks.ExampleFiles do
   Missing:     spec/fixtures/collisions/file2
   Missing:     spec/fixtures/no_collisions/file
 
+  2 example files
+
   Collision detected! spec/fixtures/collisions/file1
   • spec/fixtures/collisions/EXAMPLE-file1
   • spec/fixtures/collisions/file1.example
