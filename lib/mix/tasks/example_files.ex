@@ -150,7 +150,7 @@ defmodule Mix.Tasks.ExampleFiles do
     example_file_or_files = noncollisions |> length
                                           |> English.pluralize("example file")
                                           |> String.capitalize
-    UI |> UI.info("#{example_file_or_files} found")
+    UI |> UI.info(example_file_or_files)
 
     noncollisions
   end
