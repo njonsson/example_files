@@ -135,7 +135,12 @@ defmodule ExampleFiles.Options do
                                 verbose?:  is_verbose)
         {:ok, constructed}
       {_parsed, _arguments, unparsed} ->
-        {:stop, "Unparsed arguments #{unparsed |> inspect}"}
+        clean_unparsed = unparsed |> Enum.map(fn({unparsed_item, nil}) ->
+                                                   unparsed_item
+                                                 other ->
+                                                   other
+                                              end)
+        {:stop, "Unparsed arguments #{clean_unparsed |> inspect}"}
     end
   end
 
