@@ -122,7 +122,6 @@ defmodule ExampleFiles.Options do
 
   # Server callbacks
 
-  @spec init(any) :: {:ok, t} | {:stop, binary}
   def init([command_line_arguments]) when is_list(command_line_arguments) do
     case command_line_arguments |> parse_command_line do
       {parsed, arguments, []} ->
@@ -150,7 +149,6 @@ defmodule ExampleFiles.Options do
   end
 
   @spec construct(Keyword.t) :: t
-
   defp construct(attributes) do
     present_attributes = attributes |> Enum.reject(fn({_, v}) -> v |> is_nil end)
     __MODULE__ |> struct(present_attributes)

@@ -35,6 +35,7 @@ defmodule ExampleFiles.File do
 
   The process exits if `path` is not an example file (see `example_file?/1`).
   """
+
   def start_link(arguments, options \\ [])
 
   def start_link(arguments, options) when is_list(arguments) do
@@ -67,6 +68,7 @@ defmodule ExampleFiles.File do
   """
   def clean(file, timeout \\ 5000), do: file |> GenServer.call({:clean}, timeout)
 
+  @spec example_file?(binary) :: boolean
   @doc """
   Returns `true` if the specified `path` qualifies as an example file.
 
@@ -237,6 +239,7 @@ defmodule ExampleFiles.File do
     file |> GenServer.call({:status}, timeout)
   end
 
+  @spec identical?(binary, binary) :: boolean
   defp identical?(path1, path2) do
     case File.read(path1) do
       {:ok, content1} ->
@@ -252,6 +255,7 @@ defmodule ExampleFiles.File do
     end
   end
 
+  @spec pulled(binary) :: binary
   defp pulled(path) do
     basename = Path.basename(path)
 
@@ -269,7 +273,6 @@ defmodule ExampleFiles.File do
 
   # Server callbacks
 
-  @spec init(any) :: {:ok, binary} | {:stop, binary}
   def init([path]) when is_binary(path) do
     if path |> example_file? do
       {:ok, path}
