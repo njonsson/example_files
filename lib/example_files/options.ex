@@ -5,14 +5,14 @@ defmodule ExampleFiles.Options do
 
   use GenServer
 
-  @typedoc "A set of program options."
+  @typedoc false
   @type t :: t
 
-  # TODO: Rename `:is_verbose` to `:verbose` and type it `:count` when targeting Elixir >= v1.3
+  # TODO: Rename `:verbose?` to `:verbose` and type it `:count` when targeting Elixir >= v1.3
   defstruct fileglobs:  [],
             ignore:     ~w(.git/ _build/ deps/ node_modules/ tmp/),
-            is_quiet:   false,
-            is_verbose: false
+            quiet?:     false,
+            verbose?:   false
 
   alias ExampleFiles.Fileglobs
 
@@ -40,34 +40,84 @@ defmodule ExampleFiles.Options do
     [command_line_arguments] |> start_link(options)
   end
 
-  @spec options(pid, timeout) :: t
+  @spec fileglobs(pid, timeout) :: [binary]
   @doc """
-  Returns the options in effect.
+  Returns the fileglob options in effect.
 
   ## Examples
 
       iex> {:ok, pid} = ExampleFiles.Options.start_link([])
-      ...> pid |> ExampleFiles.Options.options
-      %ExampleFiles.Options{fileglobs: ["**/*{example,Example,EXAMPLE}*"], ignore: ~w(.git/ _build/ deps/ node_modules/ tmp/), is_quiet: false, is_verbose: false}
+      ...> pid |> ExampleFiles.Options.fileglobs
+      ["**/*{example,Example,EXAMPLE}*"]
 
       iex> {:ok, pid} = ExampleFiles.Options.start_link(~w(foo bar* baz {qux,quux}))
-      ...> pid |> ExampleFiles.Options.options
-      %ExampleFiles.Options{fileglobs: ~w({foo,baz}/**/*{example,Example,EXAMPLE}* bar*/**/*{example,Example,EXAMPLE}* {qux,quux}/**/*{example,Example,EXAMPLE}*), ignore: ~w(.git/ _build/ deps/ node_modules/ tmp/), is_quiet: false, is_verbose: false}
-
-      iex> {:ok, pid} = ExampleFiles.Options.start_link(~w(foo --ignore bar -i baz qux))
-      ...> pid |> ExampleFiles.Options.options
-      %ExampleFiles.Options{fileglobs: ["{foo,qux}/**/*{example,Example,EXAMPLE}*"], ignore: ~w(bar baz), is_quiet: false, is_verbose: false}
-
-      iex> {:ok, pid} = ExampleFiles.Options.start_link(~w(--quiet --verbose))
-      ...> pid |> ExampleFiles.Options.options
-      %ExampleFiles.Options{fileglobs: ["**/*{example,Example,EXAMPLE}*"], ignore: ~w(.git/ _build/ deps/ node_modules/ tmp/), is_quiet: true, is_verbose: true}
-
-      iex> {:ok, pid} = ExampleFiles.Options.start_link(~w(-q -v))
-      ...> pid |> ExampleFiles.Options.options
-      %ExampleFiles.Options{fileglobs: ["**/*{example,Example,EXAMPLE}*"], ignore: ~w(.git/ _build/ deps/ node_modules/ tmp/), is_quiet: true, is_verbose: true}
+      ...> pid |> ExampleFiles.Options.fileglobs
+      ~w({foo,baz}/**/*{example,Example,EXAMPLE}* bar*/**/*{example,Example,EXAMPLE}* {qux,quux}/**/*{example,Example,EXAMPLE}*)
   """
-  def options(options, timeout \\ 5000) do
-    options |> GenServer.call({:options}, timeout)
+  def fileglobs(options, timeout \\ 5000) do
+    options |> GenServer.call({:fileglobs}, timeout)
+  end
+
+  @spec ignore(pid, timeout) :: [binary]
+  @doc """
+  Returns the ignored-path options in effect.
+
+  ## Examples
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link([])
+      ...> pid |> ExampleFiles.Options.ignore
+      ~w(.git/ _build/ deps/ node_modules/ tmp/)
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link(~w(--ignore foo -i bar baz))
+      ...> pid |> ExampleFiles.Options.ignore
+      ~w(foo bar)
+  """
+  def ignore(options, timeout \\ 5000) do
+    options |> GenServer.call({:ignore}, timeout)
+  end
+
+  @spec quiet?(pid, timeout) :: boolean
+  @doc """
+  Returns the quiet option in effect.
+
+  ## Examples
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link([])
+      ...> pid |> ExampleFiles.Options.quiet?
+      false
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link(["--quiet"])
+      ...> pid |> ExampleFiles.Options.quiet?
+      true
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link(["-q"])
+      ...> pid |> ExampleFiles.Options.quiet?
+      true
+  """
+  def quiet?(options, timeout \\ 5000) do
+    options |> GenServer.call({:quiet?}, timeout)
+  end
+
+  @spec verbose?(pid, timeout) :: boolean
+  @doc """
+  Returns the verbosity option in effect.
+
+  ## Examples
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link([])
+      ...> pid |> ExampleFiles.Options.verbose?
+      false
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link(["--verbose"])
+      ...> pid |> ExampleFiles.Options.verbose?
+      true
+
+      iex> {:ok, pid} = ExampleFiles.Options.start_link(["-v"])
+      ...> pid |> ExampleFiles.Options.verbose?
+      true
+  """
+  def verbose?(options, timeout \\ 5000) do
+    options |> GenServer.call({:verbose?}, timeout)
   end
 
   # Server callbacks
@@ -80,10 +130,10 @@ defmodule ExampleFiles.Options do
         ignore = parsed |> get_all_values([:ignore, :i])
         is_quiet = parsed[:quiet] || parsed[:q]
         is_verbose = parsed[:verbose] || parsed[:v]
-        constructed = construct(fileglobs:  fileglobs,
-                                ignore:     ignore,
-                                is_quiet:   is_quiet,
-                                is_verbose: is_verbose)
+        constructed = construct(fileglobs: fileglobs,
+                                ignore:    ignore,
+                                quiet?:    is_quiet,
+                                verbose?:  is_verbose)
         {:ok, constructed}
       {_parsed, _arguments, unparsed} ->
         {:stop, "Unparsed arguments #{unparsed |> inspect}"}
@@ -92,7 +142,12 @@ defmodule ExampleFiles.Options do
 
   def init(_), do: {:stop, "Invalid command-line options"}
 
-  def handle_call({:options}, _from, options), do: {:reply, options, options}
+  for option <- ~w(fileglobs ignore quiet? verbose?)a do
+    def handle_call({unquote(option)}, _from, state) do
+      option_value = state |> Map.fetch!(unquote(option))
+      {:reply, option_value, state}
+    end
+  end
 
   @spec construct(Keyword.t) :: t
 

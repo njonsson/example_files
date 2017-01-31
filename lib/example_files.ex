@@ -104,7 +104,8 @@ defmodule ExampleFiles do
   defp all_impl(%{all: nil, options: options}=state) do
     UI |> UI.autoflush(false)
 
-    %{fileglobs: fileglobs, is_verbose: is_verbose} = options |> Options.options
+    fileglobs  = options |> Options.fileglobs
+    is_verbose = options |> Options.verbose?
     all = fileglobs |> Enum.flat_map(fn(fileglob) ->
       unfiltered = for filename <- fileglob |> Path.wildcard(match_dot: true) do
         if is_verbose do
@@ -166,7 +167,8 @@ defmodule ExampleFiles do
 
   @spec interesting?(binary, GenServer.server) :: boolean
   defp interesting?(path, options) do
-    %{ignore: ignore, is_verbose: is_verbose} = options |> Options.options
+    ignore     = options |> Options.ignore
+    is_verbose = options |> Options.verbose?
     if String.starts_with?(path, ignore) do
       if is_verbose do
         list = ignore |> Enum.map(&(&1 |> UI.underline

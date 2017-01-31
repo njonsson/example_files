@@ -87,7 +87,7 @@ defmodule Mix.Tasks.ExampleFiles do
     :example_files |> Application.ensure_all_started
 
     {:ok, options_pid} = Options.start_link(arguments)
-    (options_pid |> Options.options).fileglobs |> display_fileglobs
+    options_pid |> Options.fileglobs |> display_fileglobs
 
     {:ok, example_files_pid} = ExampleFiles.start_link(options: options_pid)
     noncollisions = example_files_pid |> display_noncollisions

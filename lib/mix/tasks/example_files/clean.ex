@@ -21,7 +21,7 @@ defmodule Mix.Tasks.ExampleFiles.Clean do
     :example_files |> Application.ensure_all_started
 
     {:ok, options_pid} = Options.start_link(arguments)
-    (options_pid |> Options.options).fileglobs |> Mix.Tasks.ExampleFiles.display_fileglobs
+    options_pid |> Options.fileglobs |> Mix.Tasks.ExampleFiles.display_fileglobs
 
     {:ok, example_files_pid} = ExampleFiles.start_link(options: options_pid)
     cleaned = example_files_pid |> clean_noncollisions
