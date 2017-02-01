@@ -1,7 +1,7 @@
 # example_files
 
-[![Travis CI build status]][Travis-CI-build-status]
-[![Hex release]           ][Hex-release]
+[<img alt="Travis CI build status" src="https://secure.travis-ci.org/njonsson/example_files.svg?branch=master" />][Travis-CI-build-status]
+[<img alt="Hex release" src="https://img.shields.io/hexpm/v/example_files.svg" />][Hex-release]
 
 **See what’s changed lately by reading the [project history][project-history].**
 
@@ -72,9 +72,6 @@ To release a new version:
 ## License
 
 Released under the [MIT License][MIT-License].
-
-[Travis CI build status]: https://secure.travis-ci.org/njonsson/example_files.svg?branch=master
-[Hex release]:            https://img.shields.io/hexpm/v/example_files.svg
 
 [Travis-CI-build-status]:      http://travis-ci.org/njonsson/example_files                        "Travis CI build status for ‘example_files’"
 [Hex-release]:                 https://hex.pm/packages/example_files                              "Hex release of ‘example_files’"
