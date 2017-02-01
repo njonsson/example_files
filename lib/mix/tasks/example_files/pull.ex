@@ -13,7 +13,9 @@ defmodule Mix.Tasks.ExampleFiles.Pull do
 
   @shortdoc "Copies into effect example files in your project"
 
-  alias ExampleFiles.{Options,UI}
+  # TODO: Use `alias ExampleFiles.{Options,UI}` when targeting Elixir >= v1.2
+  alias ExampleFiles.Options
+  alias ExampleFiles.UI
 
   @spec run([binary]) :: [pid]
   @doc false

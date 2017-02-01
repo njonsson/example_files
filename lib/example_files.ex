@@ -15,7 +15,11 @@ defmodule ExampleFiles do
 
   use GenServer
 
-  alias ExampleFiles.{English,Options,UI}
+  # TODO: Use `alias ExampleFiles.{English,Options,UI}` when targeting Elixir >= v1.2
+  alias ExampleFiles.English
+  alias ExampleFiles.Options
+  alias ExampleFiles.UI
+
   alias IO.ANSI
 
   # Client API

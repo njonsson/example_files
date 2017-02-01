@@ -80,7 +80,11 @@ defmodule Mix.Tasks.ExampleFiles do
 
   @shortdoc "Lists example files in your project"
 
-  alias ExampleFiles.{English,Options,UI}
+  # TODO: Use `alias ExampleFiles.{English,Options,UI}` when targeting Elixir >= v1.2
+  alias ExampleFiles.English
+  alias ExampleFiles.Options
+  alias ExampleFiles.UI
+
   alias IO.ANSI
 
   @spec run([binary]) :: [pid]
