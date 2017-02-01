@@ -12,13 +12,13 @@ defmodule ExampleFiles.Mixfile do
 
   def project do
     [app:               :example_files,
-     version:           version,
-     description:       description,
+     version:           version(),
+     description:       description(),
      elixir:            "~> 1.0",
      build_embedded:    Mix.env == :prod,
      start_permanent:   Mix.env == :prod,
-     package:           package,
-     deps:              deps,
+     package:           package(),
+     deps:              deps(),
      preferred_cli_env: [espec: :test],
      docs:              [extras: ["README.md":  [filename: "about",
                                                  title: "About example_files"],
