@@ -42,10 +42,10 @@ defmodule ExampleFiles.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:dialyxir,  "~> 0.5",  only: :dev},
-     {:ex_doc,    "~> 0.14", only: :dev},
-       {:earmark, "~> 1.0",  only: :dev},
-     {:espec,     "~> 1.2",  only: [:dev, :test]}]
+    [{:dialyxir,  "~> 0.5",  only:  :dev,         runtime: false},
+     {:ex_doc,    "~> 0.14", only:  :dev,         runtime: false},
+       {:earmark, "~> 1.0",  only:  :dev,         runtime: false},
+     {:espec,     "~> 1.2",  only: [:dev, :test], runtime: false}]
   end
 
   defp description, do: "Mix tasks for managing example files in your project."
