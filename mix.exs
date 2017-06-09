@@ -42,7 +42,7 @@ defmodule ExampleFiles.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:dialyze,   "~> 0.2",  only: :dev},
+    [{:dialyxir,  "~> 0.5",  only: :dev},
      {:ex_doc,    "~> 0.14", only: :dev},
        {:earmark, "~> 1.0",  only: :dev},
      {:espec,     "~> 1.2",  only: [:dev, :test]}]
